@@ -1,4 +1,4 @@
-require 'spec_helper'
+require File.join(File.dirname(__FILE__), '../spec_helper')
 
 describe PaymentsController, "handling GET /payments" do
   before(:each) {  activate_authlogic } 
@@ -13,10 +13,10 @@ describe PaymentsController, "handling GET /payments" do
            
   describe "while logged in" do
     before(:each) do 
-      @user = login_as(Factory(:beta_user)) 
+      @user = login_as(Factory(:payment_user)) 
       @p1 = Factory(:payment, :user => @user)
       @p2 = Factory(:payment, :user => @user)
-      @p_other = Factory(:payment, :user => Factory(:beta_user))
+      @p_other = Factory(:payment, :user => Factory(:payment_user))
       get :index
     end
     it "should find and assign a list of the user's past payments" do
@@ -184,7 +184,7 @@ describe PaymentsController, "handling POST /payments" do
   describe "logged in" do
     before(:each) do
       activate_authlogic
-      login_as @user = Factory(:beta_user)      
+      login_as @user = Factory(:payment_user)      
     end
 
     it "should email the receipt to the user" do

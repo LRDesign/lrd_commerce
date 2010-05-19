@@ -25,7 +25,7 @@
 #  updated_at        :datetime
 #
 
-require 'spec_helper'
+require File.join(File.dirname(__FILE__), '../spec_helper')
 
 describe Payment do
   before(:each) do
@@ -38,7 +38,7 @@ describe Payment do
   
   describe "display_name" do
     it "should return the display name of an associated user" do
-      @payment.user = Factory(:beta_user)
+      @payment.user = Factory(:payment_user)
       @payment.display_name.should == @payment.user.display_name             
     end
   end

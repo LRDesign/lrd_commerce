@@ -15,7 +15,7 @@
 #  updated_at    :datetime
 #
 
-require 'spec_helper'
+require File.join(File.dirname(__FILE__), '../spec_helper')
 
 describe PaymentTransaction do
   before(:each) do
