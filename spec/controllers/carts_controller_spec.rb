@@ -36,7 +36,7 @@ describe CartsController do
       
       describe "item creation" do
         it "should add an item to the cart" do
-          @prod = Factory(:product, :price => 30)      
+          @prod = Factory(:product, :price => 30, :available => true)      
           put :update, :cart => { :items_attributes => 
             [ {:product => @prod, :quantity => 2} ] 
           }                               
@@ -49,6 +49,7 @@ describe CartsController do
           }                                           
           assigns[:cart].items.should have(0).items          
         end
+
         it "should not add an item for an unavailable product to the cart" do
           @prod = Factory(:product, :price => 30, :available => false)      
           put :update, :cart => { :items_attributes => 
@@ -56,15 +57,17 @@ describe CartsController do
           }                               
           assigns[:cart].items.should have(0).item          
         end                                             
+        
         it "should set the item's price to the product's price" do
-          @prod = Factory(:product, :price => 30)      
+          @prod = Factory(:product, :price => 30, :available => true)      
           put :update, :cart => { :items_attributes => 
             [ {:product => @prod, :quantity => 2, :price => 20} ] 
           }                               
           assigns[:cart].items[0].price.should == 30          
         end
+        
         it "should add an item to the cart when specified by name" do
-          @prod = Factory(:product, :price => 30, :name => "Perfect Intonation 1.0")      
+          @prod = Factory(:product, :price => 30, :name => "Perfect Intonation 1.0", :available => true)      
           put :update, :product_name => "Perfect Intonation"
           assigns[:cart].items.should have(1).item                          
           assigns[:cart].items[0].product.should == @prod          

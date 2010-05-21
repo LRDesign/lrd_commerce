@@ -83,18 +83,33 @@ end
 
 describe PaymentsController, "handling POST /payments" do
 
-  before(:each) do  
+  before(:each) do
     @cart = Factory(:cart)
     @cart_item = Factory(:cart_item) 
     @cart.items << @cart_item
     @cart.save!
     session[:current_cart] = @cart
     @controller.current_or_new_cart.should == @cart     
-  end
+
+    @valid_parameters = {
+      :cc_type => 'bogus',
+      :cc_number => '1',
+      :cc_verification => '111',
+      :cc_expiration => Date.today + 5.years,
+      :first_name => 'John',
+      :last_name => 'Doe',
+      :address_1 => "1600 Pennsylvania Ave. NW",
+      :city => "Washington",
+      :state => "DC",
+      :zip => "20500",
+      :email => "john@doe.com"                 
+    }
+    @invalid_parameters = @valid_parameters.merge!({:cc_number => '2', :first_name => nil})    
+  end   
 
   it "success should create a new payment" do
     lambda do
-      post :create, :payment => valid_parameters
+      post :create, :payment => @valid_parameters
     end.should change(Payment, :count).by(1)
   end                
   
@@ -104,44 +119,44 @@ describe PaymentsController, "handling POST /payments" do
     @cart.save!                 
     
     lambda do
-      post :create, :payment => valid_parameters
+      post :create, :payment => @valid_parameters
     end.should_not change(Payment, :count)
     assigns[:payment].should == @payment            
   end
   
   it "success should create a new transaction" do     
     lambda do
-      post :create, :payment => valid_parameters
+      post :create, :payment => @valid_parameters
     end.should change(PaymentTransaction, :count).by(1)    
   end
 
   it "should mark the cart paid" do
     lambda do
-      post :create, :payment => valid_parameters      
+      post :create, :payment => @valid_parameters      
       @cart.reload      
     end.should change{ @cart.paid? }.from(false).to(true)
   end          
   
   it "should set the paid_at date" do
-    post :create, :payment => valid_parameters      
+    post :create, :payment => @valid_parameters      
     @cart.reload.payment.paid_at.should be_close(Time.now, 2.seconds)
   end             
   
   it "should set the amount in the payment" do
-    post :create, :payment => valid_parameters              
+    post :create, :payment => @valid_parameters              
     @payment = assigns[:payment]
     @payment.reload.amount.should == (@cart.price*100).round 
   end 
   
   it "should set the ip address in the payment" do
     @request.env['REMOTE_ADDR'] = '123.123.123.123'
-    post :create, :payment => valid_parameters              
+    post :create, :payment => @valid_parameters              
     assigns[:payment].ip_address.should == '123.123.123.123'
   end
 
   describe "successful transactions while logged out" do
     before(:each) do
-      post :create, :payment => valid_parameters
+      post :create, :payment => @valid_parameters
     end
     
     it "should assign a payment" do
@@ -159,8 +174,8 @@ describe PaymentsController, "handling POST /payments" do
     end                                  
     
     it "should put all the passed parameters in the new payment object" do
-      valid_parameters.keys.each { |k| 
-        assigns[:payment].send(k).should == valid_parameters[k]
+      @valid_parameters.keys.each { |k| 
+        assigns[:payment].send(k).should == @valid_parameters[k]
       }
     end
              
@@ -189,12 +204,12 @@ describe PaymentsController, "handling POST /payments" do
 
     it "should email the receipt to the user" do
       lambda do    
-        post :create, :payment => valid_parameters
+        post :create, :payment => @valid_parameters
       end.should change(ActionMailer::Base.deliveries, :length).by(1)        
     end
     
     describe "valid transactions" do
-      before(:each) {  post :create, :payment => valid_parameters   }
+      before(:each) {  post :create, :payment => @valid_parameters   }
       
       it "should associate the payment with the current user (if there one)" do
         assigns[:payment].user.should == @user 
@@ -209,30 +224,10 @@ describe PaymentsController, "handling POST /payments" do
   describe "non-successful transactions" do
     
     it "should re-render 'new' on failed save" do   
-      post :create, :payment => invalid_parameters
+      post :create, :payment => @invalid_parameters
       response.should render_template('new')
     end        
   end       
-  
-  def valid_parameters
-    {
-      :cc_type => 'bogus',
-      :cc_number => '1',
-      :cc_verification => '111',
-      :cc_expiration => Date.today + 5.years,
-      :first_name => 'John',
-      :last_name => 'Doe',
-      :address_1 => "1600 Pennsylvania Ave. NW",
-      :city => "Washington",
-      :state => "DC",
-      :zip => "20500",
-      :email => "john@doe.com"                 
-    }
-  end   
-  
-  def invalid_parameters
-    valid_parameters.merge!({:cc_number => '2', :first_name => nil})    
-  end  
 end
 
 describe PaymentsController, "handling GET /cancel" do
