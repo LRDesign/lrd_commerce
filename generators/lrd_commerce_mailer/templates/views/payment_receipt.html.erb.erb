@@ -1,0 +1,12 @@
+Dear <%%= @recipient %%>,
+
+Below is your receipt for the recent payment you made with <%=company_name%>
+If you have any questions, please contact us at <%%= CONTACT_EMAIL %%>.
+
+Regards,<br>
+<%=company_name%>
+
+<%%= @receipt.body %%>
+
+
+

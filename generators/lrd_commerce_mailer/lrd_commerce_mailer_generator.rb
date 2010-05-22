@@ -6,8 +6,12 @@ class LrdCommerceMailerGenerator < Rails::Generator::Base
       argument :domain, :type => :string, :default => "example.com"
       argument :company_name, :type => :string, :default => "My Company, Inc."
 
-      def create_user_mailer
-        template 'user_mailer.rb.erb', 'app/models/user_mailer.rb'
+      def create_model
+        template 'models/user_mailer.rb.erb', 'app/models/user_mailer.rb'
+      end
+
+      def create_view
+        template 'views/payment_receipt.html.erb.erb', 'app/views/user_mailer/payment_reciept.html.erb'
       end
     end
   end
