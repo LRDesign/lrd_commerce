@@ -104,7 +104,7 @@ describe PaymentsController, "handling POST /payments" do
       :zip => "20500",
       :email => "john@doe.com"                 
     }
-    @invalid_parameters = @valid_parameters.merge!({:cc_number => '2', :first_name => nil})    
+    @invalid_parameters = @valid_parameters.merge({:cc_number => '2', :first_name => nil})    
   end   
 
   it "success should create a new payment" do
