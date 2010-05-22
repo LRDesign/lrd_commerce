@@ -1,0 +1,54 @@
+-set_headline "Checkout"
+                                
+- page_block("Purchase Information", :cssclass => 'section') do
+  %table.listing
+    %tr
+      %th Description
+      %th Price
+    - for item in @cart.items do
+      %tr 
+        %td= item_description(item)
+        %td= h number_to_currency(item.price, :precision => 2)
+    %tr.total
+      %td TOTAL:
+      %td= h number_to_currency(@cart.price, :precision => 2)     
+      
+  = button_to "Cancel This Purchase", cancel_payments_path, :method => :get
+  
+  %p
+    Please complete your payment below.  You will be able to print your
+    receipt on the following page, and a copy will also be emailed to you.                  
+
+- secure_form_for(@payment) do |f|                                 
+  - page_block("Registration Information", :cssclass => 'section') do
+    %p                              
+      This is the name your software will be registered to.  You will need to
+      enter this name to unlock your software, so it should be the name of the
+      final user. 
+    = labeled_input f, :registration_name, :required => true  
+                                
+  - page_block("Payment Information", :cssclass => 'section') do
+    = f.error_messages :header_message => "Error Processing Transaction", |
+      :message => "Sorry, we had trouble processing your payment. Details shown below."  |
+    .form_section
+      = labeled_input f, :cc_type, :input => card_type_selector(f), :required => true      
+      = labeled_input f, :cc_number, :required => true   
+      = labeled_input f, :cc_expiration, :input => card_expiration(f), :class => 'nostretch', :required => true       
+      = labeled_input f, :cc_verification, :required => true
+      = labeled_input f, :first_name, :required => true
+      = labeled_input f, :last_name, :required => true
+      = labeled_input f, :email, :required => true, :comment => "For receipt"            
+
+    %h3 Billing Address: 
+
+    .form_section
+      = labeled_input f, :address_1, :required => true
+      = labeled_input f, :address_2, :nolabel => true, :required => true
+      = labeled_input f, :city, :required => true
+      = labeled_input f, :state, :required => true
+      = labeled_input f, :country
+      = labeled_input f, :zip, :required => true    
+
+    .form_section
+      = labeled_input f, nil, :nolabel => true, :input => f.submit("Pay Now")
+  

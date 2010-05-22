@@ -1,0 +1,8 @@
+- set_headline "Successful Payment"
+
+%p
+  Thank you for your payment to Provectis Music, Inc.   To print
+  out a receipt, please click the link below.
+
+%p.centered 
+  = button_to "View / Print Receipt", @payment.receipt, :method => 'get' 
