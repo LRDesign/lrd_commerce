@@ -11,7 +11,7 @@ class LrdCommerceMailerGenerator < Rails::Generator::Base
       end
 
       def create_view
-        template 'views/payment_receipt.html.erb.erb', 'app/views/user_mailer/payment_reciept.html.erb'
+        template 'views/payment_receipt.html.erb.erb', 'app/views/user_mailer/payment_receipt.erb'
       end
     end
   end

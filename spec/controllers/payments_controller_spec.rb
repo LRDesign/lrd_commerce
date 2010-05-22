@@ -180,7 +180,7 @@ describe PaymentsController, "handling POST /payments" do
     end
              
     describe "receipt generation" do
-      integrate_views
+      #integrate_views
       it "should associate the payment with a populated receipt" do
         assigns[:payment].receipt.should be_a(PaymentReceipt)
         assigns[:payment].receipt.body.should_not be_nil
