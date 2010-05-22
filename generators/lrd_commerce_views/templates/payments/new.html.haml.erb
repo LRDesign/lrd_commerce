@@ -19,14 +19,6 @@
     Please complete your payment below.  You will be able to print your
     receipt on the following page, and a copy will also be emailed to you.                  
 
-- secure_form_for(@payment) do |f|                                 
-  - page_block("Registration Information", :cssclass => 'section') do
-    %p                              
-      This is the name your software will be registered to.  You will need to
-      enter this name to unlock your software, so it should be the name of the
-      final user. 
-    = labeled_input f, :registration_name, :required => true  
-                                
   - page_block("Payment Information", :cssclass => 'section') do
     = f.error_messages :header_message => "Error Processing Transaction", |
       :message => "Sorry, we had trouble processing your payment. Details shown below."  |

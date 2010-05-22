@@ -1,8 +1,7 @@
 - set_headline "Payment History"
                                
 %p
-  Below is a history of payments you have made to Provectis Music, Inc.
-  through this website.
+  Below is a history of payments you have made through this website.
 
 - if @payments.blank?
   %p You have no payments in the database at this time.
@@ -20,4 +19,3 @@
         %td= brief_description(payment)
         %td= h number_to_currency(payment.price_in_cents / 100, :precision => 2)
         %td= button_to "View / Print Receipt", payment.receipt, :method => 'get'
-        

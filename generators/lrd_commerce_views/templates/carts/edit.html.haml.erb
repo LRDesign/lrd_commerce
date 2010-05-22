@@ -1,0 +1,26 @@
+
+- page_block("Shopping Cart Contents") do 
+  - form_for @cart, :url => cart_path do |f|
+    = f.error_messages
+                    
+    - if @cart.items.blank?
+      %p Your shopping cart contains no items.
+    - else   
+      %table.listing
+        %tr
+          %th Item
+          %th Quantity
+          %th Price
+          %th Subtotal
+        
+        - f.fields_for(:items) do |item_form|
+          = render :partial => 'cart_item', :locals => { :form => item_form, :item => item_form.object }    
+        %tr                                                                                                
+          %td{:colspan => 3} TOTAL
+          %td{:style => "font-weight: bold;"}= number_to_currency(@cart.price, :precision => 2) 
+                                                                                                            
+      .form_section    
+        = f.submit "Update Quantities" 
+        = f.submit "Checkout"
+  
+       

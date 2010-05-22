@@ -1,0 +1,19 @@
+%h2 Payment Receipt
+
+%p
+  Purchase made on 
+  = payment.updated_at.to_s(:date_and_time) 
+ 
+%table.listing
+  %tr
+    %th Description
+    %th Price
+  - for item in @cart.items do
+    %tr 
+      %td= item_description(item)
+      %td= h number_to_currency(item.price, :precision => 2)
+  %tr.total
+    %td TOTAL:
+    %td= h number_to_currency(@cart.price, :precision => 2)
+
+%p= "Paid via #{CREDIT_CARD_TYPE_NAMES[payment.cc_type]}."
