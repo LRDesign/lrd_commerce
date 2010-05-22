@@ -20,7 +20,7 @@ class LrdCommerceViewsGenerator < Rails::Generator::Base
       end
 
       def create_carts_item_partial
-        template '/carts/_cart_item.html.haml.erb', 'app/views/carts/edit.html.haml'
+        template 'carts/_cart_item.html.haml.erb', 'app/views/carts/_cart_item.html.haml'
       end
 
       def create_payment_receipts_partial
