@@ -24,11 +24,14 @@ class CartItemsController < ApplicationController
 
   def destroy
     @cart_item = CartItem.find(params[:id])
-    if @cart.items.include?(@cart_item) && @cart_item.destroy
-      flash[:notice] = "#{@cart_item.product.name} removed from cart."
+    item_name = @cart_item.product.name.html_safe!
+    if @cart.items.exists?(@cart_item) && @cart_item.destroy
+      flash[:notice] = "#{item_name} removed from cart."
     else
       flash[:error] = "Error removing item from cart."
     end
+
+    redirect_to :back
   end
   
   private
