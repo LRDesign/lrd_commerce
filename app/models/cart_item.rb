@@ -23,8 +23,8 @@ class CartItem < ActiveRecord::Base
     if self.product
       self.price = self.product.price
       self.description = self.product.name
+      self.quantity ||= 1
     end
-    self.quantity ||= 1
   end
 
   def subtotal
