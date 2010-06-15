@@ -22,6 +22,13 @@ class Cart < ActiveRecord::Base
     items.inject(0){ |sum, ci| sum += ci.subtotal }
   end  
 
+  def contains?(product)
+    items.each do |i|
+      return i if i.product == product
+    end
+    return false
+  end
+
   attr_accessible :items_attributes
   
   accepts_nested_attributes_for :items, :allow_destroy => true       
