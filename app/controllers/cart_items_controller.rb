@@ -3,11 +3,15 @@ class CartItemsController < ApplicationController
   before_filter :assign_cart
 
   def create
-    @product = Product.find(params[:cart_item][:product_id])
-    @cart_item = @cart.items.create(:product => @product)
-    if @cart_item.save!
-      flash[:notice] = "#{@product.name} added to cart."
-    else
+    begin
+      @product = Product.find(params[:cart_item][:product_id])
+      @cart_item = @cart.items.create(:product => @product)
+      if @cart_item.save!
+        flash[:notice] = "#{@product.name} added to cart."
+      else
+        flash[:error] = "Error adding item to cart."
+      end
+    rescue ActiveRecord::RecordNotFound
       flash[:error] = "Error adding item to cart."
     end
 
