@@ -33,6 +33,14 @@ describe Cart do
     end
   end
 
+  it "should return true for contains? on a product it contains" do
+    item = @cart.items.build(:product => @p1)
+    @cart.contains?(@p1).should == item
+  end
+
+  it "should return false for contains? on a product it doesn't contain" do
+    @cart.contains?(@p1).should == false
+  end
 end
 
 
