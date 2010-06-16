@@ -2,6 +2,8 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper') #Required for plu
 
 describe CartItemsController do
   before(:each) do
+    # set back URL
+    @back = @request.env['HTTP_REFERER'] = 'http://foo'
     @cart = Factory(:cart)
     session[:current_cart] = @cart.id
   end
@@ -22,10 +24,8 @@ describe CartItemsController do
       end
 
       it "should redirect back" do
-        # set back URL
-        back = @request.env['HTTP_REFERER'] = 'http://foo'
         post 'create', :cart_item => { :product_id => @product.id }
-        response.should redirect_to(back)
+        response.should redirect_to(@back)
       end
 
       it "should set flash for item added to cart" do
@@ -41,10 +41,8 @@ describe CartItemsController do
       end
 
       it "should redirect back" do
-        # set back URL
-        back = @request.env['HTTP_REFERER'] = 'http://foo'
         post 'create', :cart_item => { :product_id => -1 }
-        response.should redirect_to(back)
+        response.should redirect_to(@back)
       end
 
       it "should set flash for failure" do
