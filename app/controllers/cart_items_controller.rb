@@ -27,11 +27,15 @@ class CartItemsController < ApplicationController
   end
 
   def destroy
-    @cart_item = CartItem.find(params[:id])
-    item_name = @cart_item.product.name.html_safe!
-    if @cart.items.exists?(@cart_item) && @cart_item.destroy
-      flash[:notice] = "#{item_name} removed from cart."
-    else
+    begin 
+      @cart_item = CartItem.find(params[:id])
+      item_name = @cart_item.product.name.html_safe!
+      if @cart.items.exists?(@cart_item) && @cart_item.destroy
+        flash[:notice] = "#{item_name} removed from cart."
+      else
+        flash[:error] = "Error removing item from cart."
+      end
+    rescue
       flash[:error] = "Error removing item from cart."
     end
 

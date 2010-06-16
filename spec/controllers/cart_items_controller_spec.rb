@@ -9,6 +9,39 @@ describe CartItemsController do
   end
 
   ##################################################################
+  ## DELETE DESTROY
+  ##################################################################
+  describe "DELETE 'destroy'" do
+    describe "with a valid cart item ID" do
+      before(:each) do
+        @cart_item = @cart.items.create(:product => Factory(:product))
+      end
+
+      it "should remove the item from the cart" do
+        delete 'destroy', :id => @cart_item.id
+        @cart.items.should_not include(@cart_item)
+      end
+
+      it "should redirect to back" do
+        delete 'destroy', :id => @cart_item.id
+        response.should redirect_to(@back)
+      end
+    end
+
+    describe "without a valid cart item ID" do
+      it "should remove the item from the cart" do
+        delete 'destroy', :id => -1
+        flash[:error].should == "Error removing item from cart."
+      end
+
+      it "should redirect to back" do
+        delete 'destroy', :id => -1
+        response.should redirect_to(@back)
+      end
+    end
+  end
+
+  ##################################################################
   ## POST CREATE
   ##################################################################
   describe "POST 'create'" do
