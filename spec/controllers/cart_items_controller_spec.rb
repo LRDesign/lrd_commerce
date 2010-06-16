@@ -59,7 +59,8 @@ describe CartItemsController do
   ##################################################################
   describe "GET 'show', GET 'index'" do
     it "should redirect to cart" do
-      get 'show', :id => @item.id 
+      item = @cart.items.create(:product => Factory(:product))
+      get 'show', :id => item.id 
       response.should redirect_to(edit_cart_path)
       get 'index'
       response.should redirect_to(edit_cart_path)
