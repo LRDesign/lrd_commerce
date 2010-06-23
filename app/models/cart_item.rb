@@ -19,6 +19,9 @@ class CartItem < ActiveRecord::Base
   
   attr_accessible :quantity, :product
 
+  named_scope :unavailable, :joins => :product,
+    :conditions => ['products.available = ?', false]
+
   def after_initialize            
     if self.product
       self.price = self.product.price
