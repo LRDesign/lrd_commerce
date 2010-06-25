@@ -6,6 +6,7 @@ class CreateEcommerceTables < ActiveRecord::Migration
       t.integer     :quantity  
       t.string      :description
       t.decimal     :price,     :precision => 10, :scale => 2
+      t.decimal     :sales_tax, :precision => 5, :scale => 3
       t.timestamps
     end    
     add_index   :cart_items, :cart_id
