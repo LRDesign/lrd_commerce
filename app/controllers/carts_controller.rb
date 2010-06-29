@@ -20,11 +20,7 @@ class CartsController < ApplicationController
     redirect_to edit_cart_path
   end
 
-  private
-  def assign_cart
-    @cart = current_or_new_cart    
-  end                        
-                               
+  protected
   # We don't build or accept cart items that point to a nonexistent product.
   # I'm doing this here rather than in a validation, because I don't want
   # existing carts in the DB to become invalid if products get deleted
@@ -34,6 +30,11 @@ class CartsController < ApplicationController
       @cart.items.delete(item) unless item.product && item.product.available? 
     end    
   end
+
+  private
+  def assign_cart
+    @cart = current_or_new_cart    
+  end                        
   
   def add_named_items 
     # debugger
