@@ -76,4 +76,6 @@ class PaymentsController < ApplicationController
     clear_cart
     redirect_to :action => "new"
   end
+
+  include LRDCommerce::PaymentsControllerExtensions
 end

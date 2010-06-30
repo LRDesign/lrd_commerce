@@ -38,4 +38,5 @@ class CartItem < ActiveRecord::Base
     cart.paid?
   end  
   
+  include LRDCommerce::CartItemExtensions 
 end
