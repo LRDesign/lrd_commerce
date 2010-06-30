@@ -44,4 +44,5 @@ class CartsController < ApplicationController
     end
   end
 
+  include LRDCommerce::CartsControllerExtensions
 end
